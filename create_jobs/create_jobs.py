@@ -8,6 +8,11 @@ from os.path import join, isfile, isdir
 import pandas as pd
 import time
 import string
+import sys
+
+_PY2 = sys.version_info[0] == 2
+if not _PY2:
+    basestring = str
 
 def create_jobs(file_list=None, param_table=None, base_dir='.',
                 table_sep='\s+', sub_file='sub.sh', sub_prog=None,
