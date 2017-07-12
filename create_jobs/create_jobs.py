@@ -4,7 +4,7 @@
 # Copyright (c) 2017 Ben Lindsay <benjlindsay@gmail.com>
 
 from os import popen, mkdir
-from os.path import join, isfile, isdir
+from os.path import join, isfile, isdir, basename
 import pandas as pd
 import time
 import string
@@ -83,10 +83,10 @@ def _copy_and_replace_files(file_list, job_dir, param_dict):
     for input_file in file_list:
         if isinstance(input_file, basestring):
             from_file = input_file
-            to_file = join(job_dir, input_file)
+            to_file = join(job_dir, basename(input_file))
         elif isinstance(input_file, tuple):
             from_file = input_file[0]
-            to_file = join(job_dir, input_file[1])
+            to_file = join(job_dir, basename(input_file[1]))
         # Replace variables in file names, if any
         from_file = _replace_vars(from_file, param_dict)
         to_file = _replace_vars(to_file, param_dict)
