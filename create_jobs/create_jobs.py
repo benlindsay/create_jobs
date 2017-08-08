@@ -135,6 +135,8 @@ def _submit_job(job_dir, sub_file, sleep_time, sub_prog):
     Wait 'sleep_time' seconds between each submission.
     """
     print("submitting {}".format(join(job_dir, sub_file)))
-    popen('cd ' + job_dir + '; ' + sub_prog + ' ' + sub_file + '; cd -')
+    cmd = 'cd ' + job_dir + '; ' + sub_prog + ' ' + sub_file + '; cd -'
+    output = popen(cmd).read()
+    print(output)
     if sleep_time > 0:
         time.sleep(sleep_time)
