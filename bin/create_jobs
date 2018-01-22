@@ -1,0 +1,111 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+#
+# Copyright (c) 2018 Ben Lindsay <benjlindsay@gmail.com>
+
+from create_jobs import create_jobs
+from glob import glob
+from os.path import basename
+from os.path import isdir
+from os.path import isfile
+import sys
+
+usage = (
+    "Usage: " +
+    "{} [-h] [-i file_1 [file_2 ...]] [-s sub_file] [-t trials_file] [-n]"
+    .format(
+        sys.argv[0]
+    )
+)
+
+
+def parse_i(args):
+    """Parse input file argument '-i'"""
+    if '-i' in args:
+        index = args.index('-i')
+        file_list = []
+        for f in args[index+1:]:
+            if f.startswith('-'):
+                break
+            else:
+                file_list.append(f)
+        if len(file_list) == 0:
+            msg = "Need a list of files after '-i' argument"
+            raise ValueError(msg + '\n' + usage)
+    else:
+        file_list = [f for f in sorted(glob('*')) if not isdir(f)]
+        # Remove this file from file_list if present
+        this_file = basename(sys.argv[0])
+        if this_file in file_list:
+            file_list.remove(this_file)
+    return file_list
+
+
+def parse_s(args):
+    """Parse submit file argument '-s'"""
+    if '-s' in args:
+        index = args.index('-s')
+        try:
+            sub_file = args[index+1]
+        except IndexError:
+            msg = "Need a submit file after '-s' argument"
+            raise ValueError(msg + '\n' + usage)
+    else:
+        sub_file = 'sub.sh'
+    return sub_file
+
+
+def parse_t(args):
+    """Parse trials file argument '-t'"""
+    if '-t' in args:
+        index = args.index('-t')
+        try:
+            trials_file = args[index+1]
+        except IndexError:
+            msg = "Need a trials file after '-t' argument"
+            raise ValueError(msg + '\n' + usage)
+    else:
+        trials_file = 'trials.txt'
+    if not isfile(trials_file):
+        msg = "{} is not a valid file".format(trials_file)
+        raise ValueError(msg + '\n' + usage)
+    return trials_file
+
+
+def main(args):
+
+    # Parse help argument '-h'
+    if '-h' in args:
+        print(usage)
+        sys.exit()
+
+    # Parse input file argument '-i'
+    file_list = parse_i(args)
+
+    # Parse submit file argument '-s'
+    sub_file = parse_s(args)
+
+    # Parse trials file argument '-t
+    trials_file = parse_t(args)
+
+    # Parse no-submit argument '-n'
+    if '-n' in args:
+        submit = False
+    else:
+        submit = True
+
+    # Add sub_file to file_list if not present
+    if sub_file not in file_list:
+        file_list.append(sub_file)
+
+    # Remove trials_file from file_list if present
+    if trials_file in file_list:
+        file_list.remove(trials_file)
+
+
+    # Run command
+    create_jobs(file_list, trials_file, sub_file=sub_file, submit=submit)
+
+
+if __name__ == "__main__":
+    main(sys.argv[1:])
