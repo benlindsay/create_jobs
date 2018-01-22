@@ -119,7 +119,23 @@ def _replace_vars(text, param_dict):
         >>> _replace_vars('{last}, {first} {last}', {'last':'Bond'})
         'Bond, {first} Bond'
     """
-    return string.Formatter().vformat(text, (), _Safe_Dict(param_dict))
+    # Handle the edge case where a '{}' in text breaks things.
+    if '{}' in text:
+        text = text.replace('{}', '__dummy__')
+        contains_empty_brackets = True
+    else:
+        contains_empty_brackets = False
+
+    # TODO: Handle case where there are invalid characters inside brackets
+
+    # Run the string formatter
+    text = string.Formatter().vformat(text, (), _Safe_Dict(param_dict))
+
+    # Put empty brackets back in if they were there originally
+    if contains_empty_brackets:
+        text = text.replace('__dummy__', '{}')
+
+    return text
 
 class _Safe_Dict(dict):
     """
