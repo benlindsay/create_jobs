@@ -5,6 +5,7 @@
 
 from os import popen, mkdir
 from os.path import join, isfile, isdir, basename
+import numpy as np
 import pandas as pd
 import time
 import string
