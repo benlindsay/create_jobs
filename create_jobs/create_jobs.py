@@ -44,7 +44,14 @@ def create_jobs(file_list=None, param_table=None, base_dir='.',
 
     # Create JOB_NAME column if not already there
     if not 'JOB_NAME' in param_df.columns:
-        param_df['JOB_NAME'] = param_df.index
+        job_name_col = None
+        for c in param_df.columns:
+            if np.all(~param_df[c].duplicated()):
+            job_name_col = c
+        if job_name_col is None:
+            param_df['JOB_NAME'] = param_df.index
+        else:
+            param_df['JOB_NAME'] = param_df[job_name_col]
 
     # Iterate over rows of dataframe, creating and submitting jobs
     param_dict_list = param_df.to_dict(orient='records')
