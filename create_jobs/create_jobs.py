@@ -49,6 +49,7 @@ def create_jobs(file_list=None, param_table=None, base_dir='.',
         for c in param_df.columns:
             if np.all(~param_df[c].duplicated()):
                 job_name_col = c
+                break
         if job_name_col is None:
             param_df['JOB_NAME'] = param_df.index
         else:
