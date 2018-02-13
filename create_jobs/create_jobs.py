@@ -64,6 +64,8 @@ def create_jobs(file_list=None, param_table=None, base_dir='.',
             continue
         else:
             mkdir(job_dir)
+        if not sub_file in file_list:
+            file_list.append(sub_file)
         _copy_and_replace_files(file_list, job_dir, param_dict)
         if submit:
             sub_file = _replace_vars(sub_file, param_dict)
