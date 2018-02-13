@@ -74,8 +74,8 @@ def parse_t(args):
 
 def main(args):
 
-    # Parse help argument '-h'
-    if '-h' in args:
+    # Parse help argument '-h' or lack of args
+    if '-h' in args or len(args) == 0:
         print(usage)
         sys.exit()
 
