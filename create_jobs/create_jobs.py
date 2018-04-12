@@ -3,7 +3,7 @@
 #
 # Copyright (c) 2017 Ben Lindsay <benjlindsay@gmail.com>
 
-from os import popen, mkdir
+from os import popen, makedirs
 from os.path import join, isfile, isdir, basename
 import numpy as np
 import pandas as pd
@@ -63,7 +63,7 @@ def create_jobs(file_list=None, param_table=None, base_dir='.',
             print('{} already exists. Skipping.'.format(job_dir))
             continue
         else:
-            mkdir(job_dir)
+            makedirs(job_dir)
         if not sub_file in file_list:
             file_list.append(sub_file)
         _copy_and_replace_files(file_list, job_dir, param_dict)
