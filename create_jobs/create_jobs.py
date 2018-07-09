@@ -76,7 +76,7 @@ def _find_sub_prog():
     Returns the first job submission command found on the system.
     Currently, only qsub and sbatch are supported
     """
-    possible_sub_prog_list = ['qsub', 'sbatch']
+    possible_sub_prog_list = ['sbatch', 'qsub']
     for prog in possible_sub_prog_list:
         if popen('command -v ' + prog).read() != '':
             return prog

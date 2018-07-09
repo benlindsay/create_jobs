@@ -13,7 +13,7 @@ with open('README.rst', 'r') as f:
 setup(
   name = 'create_jobs',
   packages = ['create_jobs'],
-  version = '0.1.4',
+  version = '0.1.5',
   description = desc,
   long_description = long_desc,
   requires = ['numpy', 'pandas'],
